@@ -2,7 +2,7 @@ addEventListener("fetch", (event) => {
   event.passThroughOnException();
   event.respondWith(handleRequest(event.request));
 });
-
+import DOCS from './help.html'
 const dockerHub = "https://registry-1.docker.io";
 
 const routes = {
@@ -76,6 +76,15 @@ async function handleRequest(request) {
     } else {
       return resp;
     }
+  }
+  // return docs
+  if (url.pathname === "/") {
+    return new Response(DOCS, {
+      status: 200,
+      headers: {
+        "content-type": "text/html"
+      }
+    });
   }
   // get token
   if (url.pathname == "/v2/auth") {
@@ -154,14 +163,5 @@ async function fetchToken(wwwAuthenticate, scope, authorization) {
   return await fetch(url, { method: "GET", headers: headers });
 }
 
-import DOCS from './help.html'
+
  
-// return docs
-if (url.pathname === "/") {
-  return new Response(DOCS, {
-    status: 200,
-    headers: {
-      "content-type": "text/html"
-    }
-  });
-}
